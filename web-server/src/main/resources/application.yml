@@ -5,6 +5,23 @@ spring:
   application:
     name: webclient
 
+  datasource:
+    url: jdbc:postgresql://localhost:5432/diplom
+    username: postgres
+    password: 123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
 eureka:
   client:
     service-url:
