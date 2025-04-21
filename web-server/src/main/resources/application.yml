@@ -1,5 +1,6 @@
 server:
   port: 0
+  forward-headers-strategy: native
 
 spring:
   application:
@@ -22,9 +23,20 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
+  security:
+    jwt:
+      secret: m4S7G82p+6v9z8hdE6K7FUMv9wJvILvMjwDNx8G9dAU=
+      expirationMs: 1h
+
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8081/eureka
   instance:
     preferIpAddress: true
+
+logging:
+  level:
+    com.netflix.eureka: ERROR
+    com.netflix.discovery: ERROR
+
