@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: db/changelog/postgresql/001_create_schema.sql
+  - include:
+      file: db/changelog/postgresql/002_create_users_table.sql
