@@ -17,3 +17,5 @@ databaseChangeLog:
       file: db/changelog/postgresql/008_create_checkers_table.sql
   - include:
       file: db/changelog/postgresql/009_create_validators_table.sql
+  - include:
+      file: db/changelog/postgresql/010_create_checkers_and_validators_task_id_unique_constraints.sql
