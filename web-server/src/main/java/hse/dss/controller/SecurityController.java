@@ -48,7 +48,7 @@ public class SecurityController {
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         resp.addCookie(cookie);
-        return "redirect:/webclient/test";
+        return "redirect:/webclient/tasks";
     }
 
     @PostMapping("/login")
@@ -66,6 +66,22 @@ public class SecurityController {
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         resp.addCookie(cookie);
-        return "redirect:/webclient/test";
+        return "redirect:/webclient/tasks";
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Cookie cookie = new Cookie("JWT", null);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        return "redirect:/webclient/auth/login";
     }
 }

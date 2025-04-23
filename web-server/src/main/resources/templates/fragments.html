@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="ru">
+<div th:fragment="userbar">
+    <div class="userbar">
+        <span>Пользователь: <strong><span sec:authentication="name">anonymous</span></strong></span>
+        <form th:action="@{/webclient/auth/logout}" method="post">
+            <button type="submit">Выйти</button>
+        </form>
+    </div>
+</div>
+</html>
