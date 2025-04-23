@@ -70,14 +70,5 @@ public class TestService {
         testRepository.deleteById(id);
     }
 
-    public void writeTestToOutputStream(Long testId, OutputStream outputStream) {
-        Test test = testRepository.findById(testId)
-                .orElseThrow(() -> new IllegalArgumentException("Test not found: " + testId));
-        try {
-            outputStream.write(test.getInput().getBytes(StandardCharsets.UTF_8));
-            outputStream.flush();
-        } catch (Exception e) {
-            throw new RuntimeException("Ошибка при записи теста: " + testId, e);
-        }
-    }
+
 }

@@ -4,13 +4,21 @@ import hse.dss.dto.TaskDto;
 import hse.dss.dto.TestDto;
 import hse.dss.service.TaskService;
 import hse.dss.service.TestService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StreamUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.WebUtils;
 
 import java.util.List;
 
@@ -21,6 +29,7 @@ public class TestController {
 
     private final TaskService taskService;
     private final TestService testService;
+    private final RestTemplate restTemplate;
 
     @GetMapping
     public String list(@PathVariable Long taskId, Model m) {
@@ -97,13 +106,41 @@ public class TestController {
 
     @GetMapping("/{id}/download")
     public void download(@PathVariable Long id,
-                         HttpServletResponse resp) {
+                         HttpServletRequest request,
+                         HttpServletResponse response) {
         try {
-            String filename = "test-" + id + ".txt";
-            resp.setContentType("text/plain; charset=UTF-8");
-            resp.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
+            String authHeader = "";
+            Cookie jwtCookie = WebUtils.getCookie(request, "JWT");
+            if (jwtCookie != null) {
+                authHeader = "Bearer " + jwtCookie.getValue();
+            }
+            String finalAuthHeader = authHeader;
+            RequestCallback callback = clientReq -> {
+                clientReq.getHeaders().set(HttpHeaders.AUTHORIZATION, finalAuthHeader);
+                clientReq.getHeaders().set("X-GATEWAY", "true");
+            };
 
-            testService.writeTestToOutputStream(id, resp.getOutputStream());
+            // http://export-service/export/{id}/download
+            restTemplate.execute(
+                    "http://export-service/export/{id}/download",
+                    HttpMethod.GET,
+                    callback,
+                    clientHttpResponse -> {
+                        response.setContentType(
+                                clientHttpResponse.getHeaders()
+                                        .getContentType().toString());
+                        response.setHeader(
+                                HttpHeaders.CONTENT_DISPOSITION,
+                                clientHttpResponse.getHeaders()
+                                        .getFirst(HttpHeaders.CONTENT_DISPOSITION));
+
+                        StreamUtils.copy(
+                                clientHttpResponse.getBody(),
+                                response.getOutputStream());
+                        return null;
+                    },
+                    id
+            );
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при выгрузке теста: " + id, e);
         }
