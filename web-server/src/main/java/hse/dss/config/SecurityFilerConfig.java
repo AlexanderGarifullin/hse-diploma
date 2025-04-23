@@ -36,7 +36,7 @@ public class SecurityFilerConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/auth/login"))
+                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/webclient/auth/login"))
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").access(gatewayOnly)
