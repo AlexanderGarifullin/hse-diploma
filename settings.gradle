@@ -3,4 +3,5 @@ include 'eureka-server'
 include 'web-server'
 include 'api-gateway'
 include 'export-service'
+include 'generator-service'
 
