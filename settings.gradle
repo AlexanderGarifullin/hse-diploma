@@ -2,4 +2,5 @@ rootProject.name = 'diploma'
 include 'eureka-server'
 include 'web-server'
 include 'api-gateway'
+include 'export-service'
 

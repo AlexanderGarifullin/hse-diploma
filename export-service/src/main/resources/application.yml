@@ -1,0 +1,37 @@
+server:
+  port: 0
+  forward-headers-strategy: native
+
+spring:
+  application:
+    name: export-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/diplom
+    username: postgres
+    password: 123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  security:
+    jwt:
+      secret: m4S7G82p+6v9z8hdE6K7FUMv9wJvILvMjwDNx8G9dAU=
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8081/eureka
+  instance:
+    preferIpAddress: true
+
+logging:
+  level:
+    com.netflix.eureka: ERROR
+    com.netflix.discovery: ERROR
+
