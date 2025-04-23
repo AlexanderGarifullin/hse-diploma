@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Список задач</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div th:replace="fragments :: userbar"></div>
+
+<h1>Список задач</h1>
+
+<div class="search-container">
+    <form th:action="@{/webclient/tasks}" method="get">
+        <label>Поиск:</label>
+        <input name="q" th:value="${q}" placeholder="Часть имени" />
+        <button type="submit">Найти</button>
+        <a th:href="@{/webclient/tasks}">Сбросить</a>
+    </form>
+</div>
+
+<a th:href="@{/webclient/tasks/new}" class="btn">Добавить задачу</a>
+
+<table>
+    <thead>
+    <tr><th>№</th><th>Имя</th><th>Действия</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="taskDto, stat : ${tasks}">
+        <td th:text="${stat.count}"></td>
+        <td class="truncate" th:text="${taskDto.name}" th:title="${taskDto.name}"></td>
+        <td>
+            <a th:href="@{'/webclient/tasks/' + ${taskDto.id} + '/tests'}">Перейти</a>
+            <a th:href="@{'/webclient/tasks/' + ${taskDto.id} + '/edit'}">Изменить</a>
+            <form th:action="@{'/webclient/tasks/' + ${taskDto.id} + '/delete'}" method="post" style="display:inline">
+                <button type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(tasks)}">
+        <td colspan="3">Задачи не найдены</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
