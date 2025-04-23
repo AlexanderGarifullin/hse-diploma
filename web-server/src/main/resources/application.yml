@@ -1,9 +1,32 @@
 server:
   port: 0
+  forward-headers-strategy: native
 
 spring:
   application:
     name: webclient
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/diplom
+    username: postgres
+    password: 123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+  security:
+    jwt:
+      secret: m4S7G82p+6v9z8hdE6K7FUMv9wJvILvMjwDNx8G9dAU=
+      expirationMs: 1h
 
 eureka:
   client:
@@ -11,3 +34,9 @@ eureka:
       defaultZone: http://localhost:8081/eureka
   instance:
     preferIpAddress: true
+
+logging:
+  level:
+    com.netflix.eureka: ERROR
+    com.netflix.discovery: ERROR
+

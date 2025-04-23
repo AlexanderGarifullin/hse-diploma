@@ -19,3 +19,8 @@ eureka:
       defaultZone: http://localhost:8081/eureka
   instance:
     preferIpAddress: true
+
+logging:
+  level:
+    com.netflix.eureka: ERROR
+    com.netflix.discovery: ERROR

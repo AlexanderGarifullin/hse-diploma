@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/postgresql/001_create_schema.sql
+  - include:
+      file: db/changelog/postgresql/002_create_users_table.sql
+  - include:
+      file: db/changelog/postgresql/003_create_tasks_table.sql
+  - include:
+      file: db/changelog/postgresql/004_create_tests_table.sql
+  - include:
+      file: db/changelog/postgresql/005_create_solutions_types_table.sql
+  - include:
+      file: db/changelog/postgresql/006_create_programming_languages_table.sql
+  - include:
+      file: db/changelog/postgresql/007_create_solutions_table.sql
+  - include:
+      file: db/changelog/postgresql/008_create_checkers_table.sql
+  - include:
+      file: db/changelog/postgresql/009_create_validators_table.sql
+  - include:
+      file: db/changelog/postgresql/010_create_checkers_and_validators_task_id_unique_constraints.sql
+  - include:
+      file: db/changelog/postgresql/011_insert_solutions_types_and_prog_languages.sql

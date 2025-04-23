@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${testDto.id} != null ? 'Редактировать тест' : 'Новый тест'"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="fragments :: userbar"></div>
+<h1 th:text="${testDto.id} != null ? 'Редактировать тест' : 'Новый тест'"/>
+<form th:action="${testDto.id} != null
+             ? @{/webclient/tasks/{taskId}/tests/{id}(taskId=${testDto.taskId},id=${testDto.id})}
+             : @{/webclient/tasks/{taskId}/tests(taskId=${testDto.taskId})}"
+      th:object="${testDto}" method="post">
+    <div>
+        <label>Input:</label>
+        <textarea th:field="*{input}" rows="4"></textarea>
+    </div>
+    <button type="submit">Сохранить</button>
+    <a th:href="@{'/webclient/tasks/' + ${testDto.taskId} + '/tests'}">Отмена</a>
+</form>
+</body>
+</html>
