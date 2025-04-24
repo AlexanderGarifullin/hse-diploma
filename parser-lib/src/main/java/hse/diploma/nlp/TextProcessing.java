@@ -42,6 +42,7 @@ public class TextProcessing {
     private static String normalizeSpecial(String text) {
         return text.replaceAll("(?i)\\\\cdot", "*")
                 .replaceAll("(?i)\\\\times", "*")
+                .replaceAll("⋅", "*")
                 .replaceAll("≤", "<=").replaceAll("≥", ">=")
                 .replaceAll("(?i)\\\\leq?", "<=")
                 .replaceAll("(?i)\\\\geq?", ">=")
