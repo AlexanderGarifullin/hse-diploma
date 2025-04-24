@@ -24,19 +24,30 @@ public class SchemaRegexBuilder {
 
     public static Schema parse(String text) {
         text = TextProcessing.normalize(text);
+
+        Map<String, Integer> posMap = new HashMap<>();
         List<VarDescriptor> vars = new LinkedList<>();
+
         Set<String> usedNames = new HashSet<>();
 
         var topLevelVars = vars;
-        parseTestBlock(text, vars, usedNames);
+        parseTestBlock(text, vars, usedNames, posMap);
+
         if (!vars.isEmpty()) {
             vars = (List<VarDescriptor>) vars.getFirst().props().get(PropKey.FIELDS.key());
         }
-        parseScalarIntegers(text, vars, usedNames);
+        parseScalarIntegers(text, vars, usedNames, posMap);
+
+        vars.sort(Comparator.comparingInt(v ->
+                posMap.getOrDefault(v.name(), Integer.MAX_VALUE)));
+
         return new Schema(topLevelVars);
     }
 
-    private static void parseTestBlock(String text, List<VarDescriptor> vars, Set<String> usedNames) {
+    private static void parseTestBlock(String text,
+                                       List<VarDescriptor> vars,
+                                       Set<String> usedNames,
+                                       Map<String,Integer> posMap) {
         if (text == null || vars == null || usedNames == null) return;
 
         Matcher m = PAT_TEST_BLOCK.matcher(text);
@@ -65,45 +76,36 @@ public class SchemaRegexBuilder {
         ));
 
         usedNames.add(name);
+        posMap.putIfAbsent(name, m.start());
     }
 
-    private static void parseScalarIntegers(String text, List<VarDescriptor> vars, Set<String> usedNames) {
-        if (text == null || vars == null || usedNames == null) return;
+    private static void parseScalarIntegers(String text,
+                                            List<VarDescriptor> out,
+                                            Set<String> used,
+                                            Map<String,Integer> posMap) {
 
         Matcher m = ONE_SCALAR.matcher(text);
         while (m.find()) {
             String name = m.group("name");
-            String minRaw = m.group("min");
-            String maxRaw = m.group("max");
+            if (name == null || used.contains(name)) continue;
 
-            if (name == null || minRaw == null || maxRaw == null) continue;
+            long min = parseNumber(m.group("min").trim());
+            long max = parseNumber(m.group("max").trim());
 
-            name = name.trim();
-            if (usedNames.contains(name)) continue;
-
-            long min, max;
-            try {
-                min = parseNumber(minRaw.trim());
-                max = parseNumber(maxRaw.trim());
-            } catch (Exception e) {
-                continue;
-            }
-
-            Map<String, Object> props = PropMapBuilder.create()
-                    .put(PropKey.MIN.key(), min)
-                    .put(PropKey.MAX.key(), max)
-                    .build();
-
-            BaseType type = max <= 1e9 ? BaseType.INTEGER : BaseType.LONG;
-
-            vars.add(new VarDescriptor(
+            VarDescriptor vd = new VarDescriptor(
                     name,
                     Container.SCALAR,
-                    type,
-                    props
-            ));
+                    max <= 1e9 ? BaseType.INTEGER : BaseType.LONG,
+                    PropMapBuilder.create()
+                            .put(PropKey.MIN.key(), min)
+                            .put(PropKey.MAX.key(), max)
+                            .build()
+            );
 
-            usedNames.add(name);
+            out.add(vd);
+            used.add(name);
+            posMap.putIfAbsent(name, m.start());
         }
     }
+
 }
