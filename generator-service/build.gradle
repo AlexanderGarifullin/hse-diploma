@@ -12,4 +12,7 @@ dependencies {
 
     // db
     runtimeOnly 'org.postgresql:postgresql'
+
+
+    implementation(project(":parser-lib"))
 }
