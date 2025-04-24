@@ -2,8 +2,8 @@ package hse.diploma.export;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import hse.diploma.utils.model.Schema;
-import hse.diploma.utils.model.VarDescriptor;
+import hse.diploma.model.Schema;
+import hse.diploma.model.VarDescriptor;
 import lombok.experimental.UtilityClass;
 
 import java.io.IOException;

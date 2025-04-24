@@ -1,4 +1,4 @@
-package hse.diploma.utils.enums;
+package hse.diploma.enums;
 
 /**
  * Базовый тип данных переменной.

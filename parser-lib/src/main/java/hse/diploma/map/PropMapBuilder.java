@@ -1,4 +1,4 @@
-package hse.diploma.utils.map;
+package hse.diploma.map;
 
 import java.util.HashMap;
 import java.util.Map;

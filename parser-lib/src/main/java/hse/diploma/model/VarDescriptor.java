@@ -1,7 +1,7 @@
-package hse.diploma.utils.model;
+package hse.diploma.model;
 
-import hse.diploma.utils.enums.BaseType;
-import hse.diploma.utils.enums.Container;
+import hse.diploma.enums.BaseType;
+import hse.diploma.enums.Container;
 
 import java.util.Map;
 

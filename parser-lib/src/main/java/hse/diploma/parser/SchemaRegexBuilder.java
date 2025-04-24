@@ -1,24 +1,21 @@
 package hse.diploma.parser;
 
-import hse.diploma.utils.enums.BaseType;
-import hse.diploma.utils.enums.Container;
-import hse.diploma.utils.enums.props.PropKey;
-import hse.diploma.utils.map.PropMapBuilder;
-import hse.diploma.utils.model.Schema;
-import hse.diploma.utils.model.VarDescriptor;
-import hse.diploma.utils.nlp.TextProcessing;
+import hse.diploma.enums.BaseType;
+import hse.diploma.enums.Container;
+import hse.diploma.enums.props.PropKey;
+import hse.diploma.map.PropMapBuilder;
+import hse.diploma.model.Schema;
+import hse.diploma.model.VarDescriptor;
+import hse.diploma.nlp.TextProcessing;
 import lombok.experimental.UtilityClass;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static hse.diploma.parser.math.MathParser.parseRange;
-import static hse.diploma.utils.pattern.RegexPattern.PAT_TEST_BLOCK;
-import static hse.diploma.utils.pattern.RegexPattern.RANGE_BLOCK;
+import static hse.diploma.pattern.RegexPattern.PAT_TEST_BLOCK;
 
 
 /**

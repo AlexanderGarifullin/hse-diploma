@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static hse.diploma.utils.pattern.RegexPattern.RANGE_BLOCK;
+import static hse.diploma.pattern.RegexPattern.RANGE_BLOCK;
 
 @UtilityClass
 public class MathParser {

@@ -1,4 +1,4 @@
-package hse.diploma.utils.model;
+package hse.diploma.model;
 
 import java.util.List;
 

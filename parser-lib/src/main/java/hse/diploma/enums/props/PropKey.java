@@ -1,7 +1,11 @@
-package hse.diploma.utils.enums.props;
+package hse.diploma.enums.props;
+
+import hse.diploma.enums.props.values.LineType;
+import hse.diploma.enums.props.values.SortedOrder;
+import hse.diploma.model.VarDescriptor;
 
 /**
- * Enum, описывающий все допустимые ключи для props в {@link hse.diploma.utils.model.VarDescriptor}.
+ * Enum, описывающий все допустимые ключи для props в {@link VarDescriptor}.
  */
 public enum PropKey {
 
@@ -67,7 +71,7 @@ public enum PropKey {
 
     /**
      * Элементы отсортированы по возрастанию/убыванию.
-     * <p>Тип: {@link hse.diploma.utils.enums.props.values.SortedOrder} — ASC, DESC, NONE
+     * <p>Тип: {@link SortedOrder} — ASC, DESC, NONE
      */
     SORTED_ORDER("sortedOrder"),
 
@@ -97,7 +101,7 @@ public enum PropKey {
 
     /**
      * Как организован ввод массива/матрицы.
-     * <p>Тип: {@link hse.diploma.utils.enums.props.values.LineType} — SINGLE или MULTI
+     * <p>Тип: {@link LineType} — SINGLE или MULTI
      */
     LINE_TYPE("lineType"),
 
@@ -145,7 +149,7 @@ public enum PropKey {
 
     /**
      * Список полей, если переменная — объект (например, строка из нескольких чисел).
-     * <p>Тип: {@link java.util.List} из {@link hse.diploma.utils.model.VarDescriptor}
+     * <p>Тип: {@link java.util.List} из {@link VarDescriptor}
      */
     FIELDS("fields"),
 

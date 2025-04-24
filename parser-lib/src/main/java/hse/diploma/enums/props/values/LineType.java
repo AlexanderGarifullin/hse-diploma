@@ -1,4 +1,4 @@
-package hse.diploma.utils.enums.props.values;
+package hse.diploma.enums.props.values;
 
 /**
  * Тип ввода для массивов и матриц.

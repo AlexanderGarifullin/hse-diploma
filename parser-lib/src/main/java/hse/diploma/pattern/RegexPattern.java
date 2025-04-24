@@ -1,4 +1,4 @@
-package hse.diploma.utils.pattern;
+package hse.diploma.pattern;
 
 import lombok.experimental.UtilityClass;
 

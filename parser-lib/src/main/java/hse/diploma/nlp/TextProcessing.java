@@ -1,4 +1,4 @@
-package hse.diploma.utils.nlp;
+package hse.diploma.nlp;
 
 import lombok.experimental.UtilityClass;
 
