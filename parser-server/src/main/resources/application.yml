@@ -1,0 +1,44 @@
+server:
+  port: 0
+  forward-headers-strategy: native
+
+spring:
+  application:
+    name: parser-service
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/diplom-config
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/diplom
+    username: postgres
+    password: 123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  security:
+    jwt:
+      secret: m4S7G82p+6v9z8hdE6K7FUMv9wJvILvMjwDNx8G9dAU=
+
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8081/eureka
+  instance:
+    preferIpAddress: true
+
+logging:
+  level:
+    com.netflix.eureka: ERROR
+    com.netflix.discovery: ERROR
+

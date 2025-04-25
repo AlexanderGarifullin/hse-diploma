@@ -1,19 +1,20 @@
-plugins {
-    id 'java'
-}
-
-group = 'hse.diploma'
-version = '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
+    // Spring
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
-test {
-    useJUnitPlatform()
+    // Mongo
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    // PostgreSQL
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    // kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+
+    // parser lib
+    implementation(project(":parser-lib"))
 }
