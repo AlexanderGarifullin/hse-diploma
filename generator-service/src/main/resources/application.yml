@@ -22,6 +22,8 @@ spring:
   security:
     jwt:
       secret: m4S7G82p+6v9z8hdE6K7FUMv9wJvILvMjwDNx8G9dAU=
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
 
 eureka:
   client:
