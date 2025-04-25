@@ -13,6 +13,9 @@ dependencies {
     // kafka
     implementation 'org.springframework.kafka:spring-kafka'
 
+    // Mongo
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
     // db
     runtimeOnly 'org.postgresql:postgresql'
 

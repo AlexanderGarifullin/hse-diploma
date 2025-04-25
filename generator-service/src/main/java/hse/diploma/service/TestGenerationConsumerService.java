@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hse.diploma.dto.TestGenerationDTO;
 import hse.diploma.entity.Task;
 import hse.diploma.entity.Test;
+import hse.diploma.repository.SchemaConfigRepository;
 import hse.diploma.repository.TaskRepository;
 import hse.diploma.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +21,11 @@ import java.util.UUID;
 public class TestGenerationConsumerService {
 
     private final TestRepository testRepository;
+    private final SchemaConfigRepository schemaConfigRepository;
     private final TaskRepository taskRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @KafkaListener(topics = "generate-tests", groupId = "test-generation-group")
+    @KafkaListener(topics = "schema-ready", groupId = "schema-ready-group")
     public void listenGenerateTests(String message) {
         try {
             // Преобразуем JSON-сообщение в POJO
@@ -40,6 +42,15 @@ public class TestGenerationConsumerService {
 
             // TODO:
             // 1. получить схему
+            var schemaOpt = schemaConfigRepository.findById(taskId.toString());
+            if (schemaOpt.isEmpty()) {
+                log.error("Schema for task {} not found in MongoDB", taskId);
+                return;
+            }
+
+            var schema = schemaOpt.get().getSchema();
+            log.info("Schema для задачи {} успешно загружена: {}", taskId, schema);
+
             // 2. сгенировать по схеме тесты и сорханить их
 
             Test test = new Test();

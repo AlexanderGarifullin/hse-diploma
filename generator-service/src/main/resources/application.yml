@@ -6,6 +6,10 @@ spring:
   application:
     name: generator-service
 
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/diplom-config
+
   datasource:
     url: jdbc:postgresql://localhost:5432/diplom
     username: postgres
