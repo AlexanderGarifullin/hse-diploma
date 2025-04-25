@@ -1,0 +1,43 @@
+[ {
+  "name" : "t",
+  "container" : "SCALAR",
+  "baseType" : "INTEGER",
+  "props" : {
+    "min" : 1,
+    "max" : 10,
+    "lineType" : "single",
+    "fields" : [ {
+      "name" : "n",
+      "container" : "SCALAR",
+      "baseType" : "INTEGER",
+      "props" : {
+        "min" : 1,
+        "max" : 200000,
+        "lineType" : "single"
+      }
+    }, {
+      "name" : "k",
+      "container" : "SCALAR",
+      "baseType" : "INTEGER",
+      "props" : {
+        "min" : 1,
+        "max" : 200000,
+        "lineType" : "single"
+      }
+    }, {
+      "name" : "a",
+      "container" : "ARRAY",
+      "baseType" : "LONG",
+      "props" : {
+        "isPermutation" : false,
+        "min" : 1,
+        "lineType" : "single",
+        "varMinLen" : "n",
+        "varMax" : "n",
+        "isDistinct" : false,
+        "varMaxLen" : "n",
+        "sortedOrder" : "NONE"
+      }
+    } ]
+  }
+} ]
