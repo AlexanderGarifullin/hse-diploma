@@ -28,5 +28,19 @@ public class RegexPattern {
             Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE
     );
 
+    public static final Pattern ARR_SCALAR = Pattern.compile(
+            // 1) len = n / m / …
+            "(?<len>\\w+)" +
+                    // 2) строго «целых чисел»
+                    "\\s+целых\\s+чисел\\s+" +
+                    // 3) имя a/b/c…
+                    "(?<name>[A-Za-z])\\d?" +
+                    // 4) любой текст (≠ '(') до '('
+                    "[^(]*\\(" +
+                    // 5) границы: min <= … <= max
+                    "\\s*(?<min>[^<\\s]+)\\s*<=\\s*[^<\\s]+\\s*<=\\s*(?<max>[^)\\s]+)\\s*" +
+                    "\\)",
+            Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE
+    );
 
 }

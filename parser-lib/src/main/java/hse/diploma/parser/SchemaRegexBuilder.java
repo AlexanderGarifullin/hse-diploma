@@ -3,6 +3,8 @@ package hse.diploma.parser;
 import hse.diploma.enums.BaseType;
 import hse.diploma.enums.Container;
 import hse.diploma.enums.props.PropKey;
+import hse.diploma.enums.props.values.LineType;
+import hse.diploma.enums.props.values.SortedOrder;
 import hse.diploma.map.PropMapBuilder;
 import hse.diploma.model.Schema;
 import hse.diploma.model.VarDescriptor;
@@ -12,6 +14,7 @@ import lombok.experimental.UtilityClass;
 import java.util.*;
 import java.util.regex.Matcher;
 
+import static hse.diploma.parser.array.ArrayParser.detectOrder;
 import static hse.diploma.parser.math.MathParser.parseNumber;
 import static hse.diploma.parser.math.MathParser.parseRange;
 import static hse.diploma.pattern.RegexPattern.*;
@@ -37,7 +40,7 @@ public class SchemaRegexBuilder {
             vars = (List<VarDescriptor>) vars.getFirst().props().get(PropKey.FIELDS.key());
         }
         parseScalarIntegers(text, vars, usedNames, posMap);
-
+        parseArrayIntegers  (text, vars, usedNames, posMap);
         vars.sort(Comparator.comparingInt(v ->
                 posMap.getOrDefault(v.name(), Integer.MAX_VALUE)));
 
@@ -66,6 +69,7 @@ public class SchemaRegexBuilder {
                 .put(PropKey.MIN.key(), rng[0])
                 .put(PropKey.MAX.key(), rng[1])
                 .put(PropKey.FIELDS.key(), inner)
+                .put(PropKey.LINE_TYPE.key(), LineType.SINGLE.key())
                 .build();
 
         vars.add(new VarDescriptor(
@@ -99,10 +103,73 @@ public class SchemaRegexBuilder {
                     PropMapBuilder.create()
                             .put(PropKey.MIN.key(), min)
                             .put(PropKey.MAX.key(), max)
+                            .put(PropKey.LINE_TYPE.key(), LineType.SINGLE.key())
                             .build()
             );
 
             out.add(vd);
+            used.add(name);
+            posMap.putIfAbsent(name, m.start());
+        }
+    }
+
+    private static void parseArrayIntegers(String text,
+                                           List<VarDescriptor> out,
+                                           Set<String> used,
+                                           Map<String,Integer> posMap) {
+
+        Matcher m = ARR_SCALAR.matcher(text);
+        while (m.find()) {
+
+            String name = m.group("name");
+            if (name == null || used.contains(name)) continue;
+
+            String lenRaw = m.group("len").trim();
+            Long fixedLen = null;
+            try { fixedLen = parseNumber(lenRaw); } catch (Exception ignore) {}
+
+            Object varMinLen = (fixedLen != null ? fixedLen : lenRaw);
+            Object varMaxLen = varMinLen;
+
+
+            String leftRaw  = m.group("min").trim();
+            String rightRaw = m.group("max").trim();
+
+            Long minVal = null, maxVal = null;
+            try { minVal = parseNumber(leftRaw);  } catch (Exception ignore) {}
+            try { maxVal = parseNumber(rightRaw); } catch (Exception ignore) {}
+
+
+            PropMapBuilder b = PropMapBuilder.create()
+                    .put(PropKey.VAR_MIN_LEN.key(),  varMinLen)
+                    .put(PropKey.VAR_MAX_LEN.key(),  varMaxLen);
+
+
+            if (minVal != null) b.put(PropKey.MIN.key(),     minVal);
+            else                b.put(PropKey.VAR_MIN.key(), leftRaw);
+
+
+            if (maxVal != null) b.put(PropKey.MAX.key(),     maxVal);
+            else                b.put(PropKey.VAR_MAX.key(), rightRaw);
+
+
+            String chunk = m.group(0).toLowerCase();
+            b.put(PropKey.IS_DISTINCT.key(),    chunk.contains("различн"))
+                    .put(PropKey.IS_PERMUTATION.key(), chunk.contains("перестанов"))
+                    .put(PropKey.SORTED_ORDER.key(),   detectOrder(chunk))
+                    .put(PropKey.LINE_TYPE.key(),      LineType.SINGLE.key());
+
+            Map<String,Object> props = b.build();
+
+
+            BaseType bt;
+            if (maxVal != null && maxVal <= 1_000_000_000L) bt = BaseType.INTEGER;
+            else                                            bt = BaseType.LONG;
+
+
+            VarDescriptor vd = new VarDescriptor(name, Container.ARRAY, bt, props);
+            out.add(vd);
+
             used.add(name);
             posMap.putIfAbsent(name, m.start());
         }
