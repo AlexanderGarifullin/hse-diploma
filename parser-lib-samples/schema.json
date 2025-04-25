@@ -16,6 +16,15 @@
         "lineType" : "single"
       }
     }, {
+      "name" : "k",
+      "container" : "SCALAR",
+      "baseType" : "INTEGER",
+      "props" : {
+        "min" : 1,
+        "max" : 200000,
+        "lineType" : "single"
+      }
+    }, {
       "name" : "a",
       "container" : "ARRAY",
       "baseType" : "LONG",
@@ -28,15 +37,6 @@
         "isDistinct" : false,
         "varMaxLen" : "n",
         "sortedOrder" : "NONE"
-      }
-    }, {
-      "name" : "k",
-      "container" : "SCALAR",
-      "baseType" : "INTEGER",
-      "props" : {
-        "min" : 1,
-        "max" : 200000,
-        "lineType" : "single"
       }
     } ]
   }

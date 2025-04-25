@@ -2,9 +2,17 @@ package hse.diploma.nlp;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * Утилитный класс для нормализации текста входных данных перед парсингом.
+ * Удаляет LaTeX, упрощает спецсимволы, приводит пробелы и т.п.
+ */
 @UtilityClass
 public class TextProcessing {
 
+    /**
+     * Главный метод нормализации.
+     * Удаляет LaTeX, команды форматирования, спецсимволы, комментарии и лишние пробелы.
+     */
     public static String normalize(String text) {
         if (text == null) return "";
 

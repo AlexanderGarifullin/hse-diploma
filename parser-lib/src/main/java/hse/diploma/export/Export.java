@@ -9,8 +9,14 @@ import lombok.experimental.UtilityClass;
 import java.io.IOException;
 import java.nio.file.Path;
 
+/**
+ * Утилитный класс для экспорта схемы в текстовый и JSON-форматы.
+ */
 @UtilityClass
 public class Export {
+    /**
+     * Преобразует схему в читаемый текст: имя, тип, props.
+     */
     public String asPrettyText(Schema schema) {
         StringBuilder sb = new StringBuilder();
         for (VarDescriptor v : schema.vars()) {
@@ -23,6 +29,9 @@ public class Export {
         return sb.toString();
     }
 
+    /**
+     * Сохраняет схему в JSON-файл по заданному пути.
+     */
     public static void saveToJson(Schema schema, Path path) throws IOException {
         ObjectMapper om = new ObjectMapper()
                 .enable(SerializationFeature.INDENT_OUTPUT);

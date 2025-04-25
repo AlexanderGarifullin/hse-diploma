@@ -8,9 +8,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static hse.diploma.pattern.RegexPattern.RANGE_BLOCK;
-
+/**
+ * Утилитный класс для работы с математическими выражениями, встречающимися в диапазонах (например, 2*10^5, 10^4, 1e5).
+ */
 @UtilityClass
 public class MathParser {
+    /**
+     * Извлекает два числа из диапазона вида "1<=x<=n" или "0<=k<=10^5".
+     * Если найдены одно или два числа, возвращает массив из двух элементов.
+     */
     public static long[] parseRange(String rangeText) {
         Matcher m = RANGE_BLOCK.matcher(rangeText);
         List<Long> nums = new ArrayList<>();
@@ -28,6 +34,13 @@ public class MathParser {
         }
     }
 
+    /**
+     * Преобразует строковое представление числа в long.
+     * Поддерживает форматы:
+     * - обычные числа: 123
+     * - научная нотация: 2e5
+     * - степени десятки: 2*10^5, 10^6 и т.п.
+     */
     public static long parseNumber(String s) {
         s = s.replaceAll("\\s+", ""); // удалить пробелы
 

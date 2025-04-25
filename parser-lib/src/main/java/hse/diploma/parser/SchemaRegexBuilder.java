@@ -20,11 +20,24 @@ import static hse.diploma.parser.math.MathParser.parseRange;
 import static hse.diploma.pattern.RegexPattern.*;
 
 /**
- * Собирает {@link Schema} по разделу "Входные данные" (LaTeX, русский).
+ * Утилитный класс, собирающий структуру {@link Schema} по тексту на русском языке (обычно — раздел "Входные данные" задачи).
+ * Использует регулярные выражения и эвристики для распознавания переменных, их типов, ограничений и структуры вложенности.
+ * <p>
+ * Основная точка входа — метод {@link #parse(String)}.
  */
 @UtilityClass
 public class SchemaRegexBuilder {
 
+    /**
+     * Главный метод: извлекает структуру входных данных из переданного текста задачи.
+     * <p>
+     * 1. Производит нормализацию текста (удаление LaTeX, пробелов, замену символов и т.п.).<br>
+     * 2. Вызывает парсеры: тест-блок, скалярные переменные, массивы и т.д.<br>
+     * 3. Упорядочивает переменные по позиции первого вхождения в тексте.<br>
+     *
+     * @param text текст раздела "Входные данные" на русском языке (возможно с LaTeX).
+     * @return объект {@link Schema}, содержащий найденные переменные
+     */
     public static Schema parse(String text) {
         text = TextProcessing.normalize(text);
 
@@ -47,6 +60,12 @@ public class SchemaRegexBuilder {
         return new Schema(topLevelVars);
     }
 
+    /**
+     * Парсит описание количества тестов — например, строка вида:
+     * "Первая строка содержит целое число t (1<=t<=10^4) — количество тестов".
+     * <p>
+     * Создаёт переменную с именем t, типом SCALAR и вложенными переменными внутри (fields).
+     */
     private static void parseTestBlock(String text,
                                        List<VarDescriptor> vars,
                                        Set<String> usedNames,
@@ -83,6 +102,12 @@ public class SchemaRegexBuilder {
         posMap.putIfAbsent(name, m.start());
     }
 
+    /**
+     * Парсит отдельные скалярные переменные — например:
+     * "целое число n (1<=n<=2*10^5)"
+     * <p>
+     * Добавляет переменную SCALAR с типом INTEGER или LONG, в зависимости от диапазона.
+     */
     private static void parseScalarIntegers(String text,
                                             List<VarDescriptor> out,
                                             Set<String> used,
@@ -113,6 +138,18 @@ public class SchemaRegexBuilder {
         }
     }
 
+
+    /**
+     * Парсит массивы целых чисел — например:
+     * "n целых чисел a1, a2, ..., a_n (1<=a_i<=n)"
+     * <p>
+     * Распознаёт:
+     * <ul>
+     *     <li>Длину массива: зависящую от переменной</li>
+     *     <li>Ограничения на значения элементов</li>
+     *     <li>Флаги: уникальность, перестановка, порядок сортировки</li>
+     * </ul>
+     */
     private static void parseArrayIntegers(String text,
                                            List<VarDescriptor> out,
                                            Set<String> used,
