@@ -197,7 +197,7 @@ public class TestController {
 
     @PostMapping("/generate")
     public String generate(@PathVariable Long taskId) {
-        // TODO:
+        testService.requestTestGeneration(taskId);
         return "redirect:/webclient/tasks/" + taskId + "/tests";
     }
 

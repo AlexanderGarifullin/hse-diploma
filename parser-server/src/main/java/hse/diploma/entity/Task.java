@@ -1,4 +1,4 @@
-package hse.dss.entity;
+package hse.diploma.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,10 +21,6 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
-
     @Column(nullable = false)
     private String name;
 
@@ -43,29 +39,6 @@ public class Task {
     @Column(name = "memery_limit", nullable = false)
     private Integer memoryLimit;
 
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-    private List<Test> tests;
-
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-    private List<Solution> solutions;
-
-    @OneToOne(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Checker checker;
-
-    @OneToOne(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Validator validators;
-
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
-
-
-    @PrePersist
-    public void prePersist() {
-        updatedAt = Instant.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = Instant.now();
-    }
 }

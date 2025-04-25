@@ -6,6 +6,7 @@ import hse.dss.entity.Test;
 import hse.dss.repository.TaskRepository;
 import hse.dss.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.OutputStream;
@@ -20,6 +21,10 @@ public class TestService {
 
     private final TestRepository testRepository;
     private final TaskRepository taskRepository;
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    private static final String TOPIC_GENERATE_TESTS = "generate-tests";
 
     public List<TestDto> findAllByTaskId(Long taskId) {
         Task task = taskRepository.findById(taskId)
@@ -71,4 +76,8 @@ public class TestService {
     }
 
 
+    public void requestTestGeneration(Long taskId) {
+        String message = String.format("{\"taskId\": %d}", taskId);
+        kafkaTemplate.send(TOPIC_GENERATE_TESTS, message);
+    }
 }
