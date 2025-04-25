@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -53,4 +54,18 @@ public class Task {
 
     @OneToOne(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Validator validators;
+
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
+
+
+    @PrePersist
+    public void prePersist() {
+        updatedAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = Instant.now();
+    }
 }

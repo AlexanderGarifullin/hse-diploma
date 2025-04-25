@@ -21,3 +21,5 @@ databaseChangeLog:
       file: db/changelog/postgresql/010_create_checkers_and_validators_task_id_unique_constraints.sql
   - include:
       file: db/changelog/postgresql/011_insert_solutions_types_and_prog_languages.sql
+  - include:
+      file: db/changelog/postgresql/012_add_updated_at_column_tasks_table.sql
