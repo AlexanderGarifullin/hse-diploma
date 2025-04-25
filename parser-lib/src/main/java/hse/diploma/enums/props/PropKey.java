@@ -10,6 +10,12 @@ import hse.diploma.model.VarDescriptor;
 public enum PropKey {
 
     /**
+     * Переменная обозначает количество тестов
+     * <p>Тип: {@link Boolean}
+     */
+    IS_TEST_CASE_VAR("isTestCase"),
+
+    /**
      * Минимально допустимое значение переменной.
      * <p>Тип: {@link Long}
      */
