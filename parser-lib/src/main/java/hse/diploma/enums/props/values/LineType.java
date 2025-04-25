@@ -9,7 +9,7 @@ public enum LineType {
      * Все элементы находятся в одной строке.
      * Например: 1 2 3 4 5
      */
-    SINGLE,
+    SINGLE("single"),
 
     /**
      * Каждый элемент или подмассив расположен на отдельной строке.
@@ -20,5 +20,20 @@ public enum LineType {
      * 3
      * </pre>
      */
-    MULTI
+    MULTI("multi");
+
+    private final String key;
+
+    LineType(String key) {
+        this.key = key;
+    }
+
+    public String key() {
+        return key;
+    }
+
+    @Override
+    public String toString() {
+        return key;
+    }
 }
