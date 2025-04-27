@@ -39,6 +39,7 @@ public class SecurityFilerConfig {
                         .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/webclient/auth/login"))
                 )
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/css/*").permitAll()
                         .requestMatchers("/auth/**").access(gatewayOnly)
                         .anyRequest().authenticated()
                 )
