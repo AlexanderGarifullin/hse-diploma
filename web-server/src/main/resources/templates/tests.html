@@ -4,6 +4,7 @@
     <meta charset="UTF-8"/>
     <title>Тесты задачи</title>
     <link rel="stylesheet" th:href="@{/webclient/css/tests.css}" />
+    <link rel="stylesheet" th:href="@{/webclient/css/userbar.css}" />
 </head>
 <body>
 <div th:replace="fragments :: userbar"></div>
@@ -18,30 +19,17 @@
     </div>
 
     <div class="actions">
-        <a th:href="@{'/webclient/tasks/' + ${task.id} + '/tests/downloadAll'}">
-            Скачать все
-        </a>
-        <form th:action="@{'/webclient/tasks/' + ${task.id} + '/tests/generate'}"
-              method="post" style="display:inline">
+        <a th:href="@{'/webclient/tasks/' + ${task.id} + '/tests/downloadAll'}">Скачать все</a>
+        <form th:action="@{'/webclient/tasks/' + ${task.id} + '/tests/generate'}" method="post" style="display:inline">
             <button type="submit">Сгенерировать тесты</button>
         </form>
-        <a th:href="@{'/webclient/tasks/' + ${task.id} + '/tests/new'}">
-            Добавить тест
-        </a>
-        <form th:action="@{'/webclient/tasks/' + ${task.id} + '/tests/deleteAll'}"
-              method="post" style="display:inline">
+        <a th:href="@{'/webclient/tasks/' + ${task.id} + '/tests/new'}">Добавить тест</a>
+        <form th:action="@{'/webclient/tasks/' + ${task.id} + '/tests/deleteAll'}" method="post" style="display:inline">
             <button type="submit">Удалить все тесты</button>
         </form>
-
-        <a th:href="@{'/webclient/tasks/' + ${task.id} + '/tests/viewTask'}">
-            Просмотреть задачу
-        </a>
-
-        <a th:href="@{/webclient/tasks}" class="btn btn-secondary">
-            Назад ко всем задачам
-        </a>
+        <a th:href="@{'/webclient/tasks/' + ${task.id} + '/tests/viewTask'}">Просмотреть задачу</a>
+        <a th:href="@{/webclient/tasks}" class="btn btn-secondary">Назад ко всем задачам</a>
     </div>
-
 
     <table>
         <thead>
@@ -52,19 +40,15 @@
             <td th:text="${stat.count}"></td>
             <td class="truncate" th:text="${test.input}" th:title="${test.input}"></td>
             <td>
-                <a th:href="@{'/webclient/tasks/' + ${task.id} + '/tests/' + ${test.id} + '/download'}">
-                    Скачать
-                </a>
-                <a th:href="@{'/webclient/tasks/' + ${task.id} + '/tests/' + ${test.id} + '/view'}">
-                    Просмотр
-                </a>
-                <a th:href="@{'/webclient/tasks/' + ${task.id} + '/tests/' + ${test.id} + '/edit'}">
-                    Изменить
-                </a>
-                <form th:action="@{'/webclient/tasks/' + ${task.id} + '/tests/' + ${test.id} + '/delete'}"
-                      method="post" style="display:inline">
-                    <button type="submit">Удалить</button>
-                </form>
+                <!-- Единый стиль действий в таблице -->
+                <div class="actions">
+                    <a th:href="@{'/webclient/tasks/' + ${task.id} + '/tests/' + ${test.id} + '/download'}">Скачать</a>
+                    <a th:href="@{'/webclient/tasks/' + ${task.id} + '/tests/' + ${test.id} + '/view'}">Просмотр</a>
+                    <a th:href="@{'/webclient/tasks/' + ${task.id} + '/tests/' + ${test.id} + '/edit'}">Изменить</a>
+                    <form th:action="@{'/webclient/tasks/' + ${task.id} + '/tests/' + ${test.id} + '/delete'}" method="post" style="display:inline">
+                        <button type="submit">Удалить</button>
+                    </form>
+                </div>
             </td>
         </tr>
         <tr th:if="${#lists.isEmpty(tests)}">

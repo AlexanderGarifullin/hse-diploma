@@ -5,6 +5,7 @@
     <title th:if="${readOnly == null || !readOnly}" th:text="${taskDto.id} != null ? 'Редактировать задачу' : 'Новая задача'"></title>
     <title th:if="${readOnly != null && readOnly}">Задача</title>
     <link rel="stylesheet" th:href="@{/webclient/css/task_form.css}" />
+    <link rel="stylesheet" th:href="@{/webclient/css/userbar.css}" />
 </head>
 <body>
 <div th:replace="fragments :: userbar"></div>
