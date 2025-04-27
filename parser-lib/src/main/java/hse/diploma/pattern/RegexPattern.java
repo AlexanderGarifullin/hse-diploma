@@ -21,7 +21,10 @@ public class RegexPattern {
                     "—\\s*количество               # «— количество …»\n",
             Pattern.UNICODE_CHARACTER_CLASS);
 
-    public static final Pattern RANGE_BLOCK = Pattern.compile("(-?\\d+(?:e\\d+)?|\\d+\\*?10\\^\\d+)");
+    public static final Pattern RANGE_BLOCK = Pattern.compile(
+            "-?(?:\\d+\\*10\\^\\d+|10\\^\\d+|\\d+e\\d+|\\d+)"
+    );
+
 
     public static final Pattern ONE_SCALAR = Pattern.compile(
             "(?:одно\\s+)?целое\\s+число\\s+(?<name>[a-zA-Z_][a-zA-Z_0-9]*)\\s*\\(\\s*(?<min>[^<]+)<=\\s*[^<]+<=\\s*(?<max>[^\\)]+)\\s*\\)",
