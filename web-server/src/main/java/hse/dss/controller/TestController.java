@@ -46,6 +46,7 @@ public class TestController {
     @GetMapping("/new")
     public String createForm(@PathVariable Long taskId, Model m) {
         m.addAttribute("testDto", new TestDto(null, taskId, ""));
+        m.addAttribute("readOnly", false);
         return "test_form";
     }
 
@@ -56,6 +57,7 @@ public class TestController {
                          Model m) {
         if (br.hasErrors()) {
             m.addAttribute("testDto", testDto);
+            m.addAttribute("readOnly", false);
             return "test_form";
         }
 
@@ -70,6 +72,7 @@ public class TestController {
         TestDto dto = testService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Test not found: " + id));
         m.addAttribute("testDto", dto);
+        m.addAttribute("readOnly", false);
         return "test_form";
     }
 
@@ -81,6 +84,7 @@ public class TestController {
                          Model m) {
         if (br.hasErrors()) {
             m.addAttribute("testDto", testDto);
+            m.addAttribute("readOnly", false);
             return "test_form";
         }
 
@@ -92,6 +96,12 @@ public class TestController {
     public String delete(@PathVariable Long taskId,
                          @PathVariable Long id) {
         testService.deleteById(id);
+        return "redirect:/webclient/tasks/" + taskId + "/tests";
+    }
+
+    @PostMapping("/deleteAll")
+    public String deleteAll(@PathVariable Long taskId) {
+        testService.deleteAllByTaskId(taskId);
         return "redirect:/webclient/tasks/" + taskId + "/tests";
     }
 
@@ -193,6 +203,15 @@ public class TestController {
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при выгрузке всех тестов задачи " + taskId, e);
         }
+    }
+
+    @GetMapping("/viewTask")
+    public String viewTask(@PathVariable Long taskId, Model m) {
+        TaskDto task = taskService.findById(taskId)
+                .orElseThrow(() -> new IllegalArgumentException("Задача не найдена: " + taskId));
+        m.addAttribute("taskDto", task);
+        m.addAttribute("readOnly", true);
+        return "task_form";
     }
 
     @PostMapping("/generate")
