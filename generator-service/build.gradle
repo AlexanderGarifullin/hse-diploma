@@ -21,4 +21,7 @@ dependencies {
 
     // parser lib
     implementation(project(":parser-lib"))
+
+    // generator lib
+    implementation(project(":gen-library"))
 }
