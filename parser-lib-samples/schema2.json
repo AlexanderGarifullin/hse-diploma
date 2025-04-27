@@ -37,7 +37,7 @@
         "varMax" : "n",
         "isDistinct" : false,
         "varMaxLen" : "n",
-        "sortedOrder" : "NONE"
+        "sortedOrder" : "none"
       }
     } ]
   }

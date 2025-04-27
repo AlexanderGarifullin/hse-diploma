@@ -6,4 +6,5 @@ include 'export-service'
 include 'generator-service'
 include 'parser-lib'
 include 'parser-server'
+include 'gen-library'
 
