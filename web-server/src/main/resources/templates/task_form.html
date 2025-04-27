@@ -3,48 +3,80 @@
 <head>
     <meta charset="UTF-8" />
     <title th:text="${taskDto.id} != null ? 'Редактировать задачу' : 'Новая задача'"></title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+
+    <link rel="stylesheet" th:href="@{/webclient/css/task_form.css}" />
 </head>
 <body>
 <div th:replace="fragments :: userbar"></div>
 
-<h1 th:text="${taskDto.id} != null ? 'Редактировать задачу' : 'Новая задача'"></h1>
+<div class="container">
+    <div class="form-container">
+        <h1 th:text="${taskDto.id} != null ? 'Редактировать задачу' : 'Новая задача'"></h1>
 
-<form th:action="${taskDto.id} != null ? @{/webclient/tasks/{id}(id=${taskDto.id})} : @{/webclient/tasks}"
-      th:object="${taskDto}" method="post">
-    <div>
-        <label>Имя:</label>
-        <input type="text" th:field="*{name}" />
-        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
-    </div>
-    <div>
-        <label>Время (ms):</label>
-        <input type="number" th:field="*{timeLimit}" />
-        <div th:if="${#fields.hasErrors('timeLimit')}" th:errors="*{timeLimit}"></div>
-    </div>
-    <div>
-        <label>Память (MB):</label>
-        <input type="number" th:field="*{memoryLimit}" />
-        <div th:if="${#fields.hasErrors('memoryLimit')}" th:errors="*{memoryLimit}"></div>
-    </div>
-    <div>
-        <label>Легенда:</label>
-        <textarea th:field="*{legend}" rows="3"></textarea>
-        <div th:if="${#fields.hasErrors('legend')}" th:errors="*{legend}"></div>
-    </div>
-    <div>
-        <label>Входные данные:</label>
-        <textarea th:field="*{inputData}" rows="3"></textarea>
-        <div th:if="${#fields.hasErrors('inputData')}" th:errors="*{inputData}"></div>
-    </div>
-    <div>
-        <label>Выходные данные:</label>
-        <textarea th:field="*{outputData}" rows="3"></textarea>
-        <div th:if="${#fields.hasErrors('outputData')}" th:errors="*{outputData}"></div>
-    </div>
+        <form th:action="${taskDto.id} != null
+                       ? @{/webclient/tasks/{id}(id=${taskDto.id})}
+                       : @{/webclient/tasks}"
+              th:object="${taskDto}"
+              method="post">
 
-    <button type="submit">Сохранить</button>
-    <a th:href="@{/webclient/tasks}">Отмена</a>
-</form>
+            <div class="form-group">
+                <label>Имя:</label>
+                <input type="text" th:field="*{name}" />
+                <div th:if="${#fields.hasErrors('name')}"
+                     th:errors="*{name}"
+                     class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Время (ms):</label>
+                <input type="number" th:field="*{timeLimit}" />
+                <div th:if="${#fields.hasErrors('timeLimit')}"
+                     th:errors="*{timeLimit}"
+                     class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Память (MB):</label>
+                <input type="number" th:field="*{memoryLimit}" />
+                <div th:if="${#fields.hasErrors('memoryLimit')}"
+                     th:errors="*{memoryLimit}"
+                     class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Легенда:</label>
+                <textarea th:field="*{legend}"></textarea>
+                <div th:if="${#fields.hasErrors('legend')}"
+                     th:errors="*{legend}"
+                     class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Входные данные:</label>
+                <textarea th:field="*{inputData}"></textarea>
+                <div th:if="${#fields.hasErrors('inputData')}"
+                     th:errors="*{inputData}"
+                     class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Выходные данные:</label>
+                <textarea th:field="*{outputData}"></textarea>
+                <div th:if="${#fields.hasErrors('outputData')}"
+                     th:errors="*{outputData}"
+                     class="error"></div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn">
+                    Сохранить
+                </button>
+                <a th:href="@{/webclient/tasks}" class="btn btn-secondary">
+                    Отмена
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>
