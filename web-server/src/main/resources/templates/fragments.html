@@ -6,7 +6,7 @@
     <div class="userbar">
         <span>Пользователь: <strong><span sec:authentication="name">anonymous</span></strong></span>
         <form th:action="@{/webclient/auth/logout}" method="post">
-            <button type="submit">Выйти</button>
+            <button type="submit" class="btn">Выйти</button>
         </form>
     </div>
 </div>

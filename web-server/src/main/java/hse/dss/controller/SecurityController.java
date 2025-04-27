@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.*;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,18 +23,27 @@ public class SecurityController {
     private final JwtService jwtService;
 
     @GetMapping("/login")
-    public String loginPage() {
+    public String loginPage(@RequestParam(name="error", required=false) String error,
+                            Model model) {
+        if (error != null) {
+            model.addAttribute("loginError", "Неверное имя пользователя или пароль");
+        }
         return "login";
     }
 
     @GetMapping("/register")
-    public String registerPage(Model m) {
-        m.addAttribute("user", new User());
+    public String registerPage(Model model) {
+        model.addAttribute("user", new User());
         return "register";
     }
 
     @PostMapping("/register")
-    public String doRegister(@ModelAttribute("user") User u, BindingResult br, HttpServletResponse resp) {
+    public String doRegister(@ModelAttribute("user") User u,
+                             org.springframework.validation.BindingResult br,
+                             HttpServletResponse resp) {
+        // Удаляем пробелы у имени пользователя
+        u.setUsername(u.getUsername() != null ? u.getUsername().trim() : null);
+
         if (userRepository.findByUsername(u.getUsername()).isPresent()) {
             br.rejectValue("username", "taken", "Имя занято");
             return "register";
@@ -42,12 +51,13 @@ public class SecurityController {
 
         u.setPassword(passwordEncoder.encode(u.getPassword()));
         userRepository.save(u);
-        String token = jwtService.generateToken(new UserDetails(u));
 
-        var cookie = new Cookie("JWT", token);
+        String token = jwtService.generateToken(new UserDetails(u));
+        Cookie cookie = new Cookie("JWT", token);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         resp.addCookie(cookie);
+
         return "redirect:/webclient/tasks";
     }
 
@@ -55,17 +65,22 @@ public class SecurityController {
     public String doLogin(@RequestParam String username,
                           @RequestParam String password,
                           HttpServletResponse resp) {
-        var user = userRepository.findByUsername(username)
-                .orElseThrow();
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            return "redirect:/login?error";
-        }
-        String token = jwtService.generateToken(new UserDetails(user));
+        username = username.trim();
 
-        var cookie = new Cookie("JWT", token);
+        Optional<User> optUser = userRepository.findByUsername(username);
+
+        if (optUser.isEmpty() ||
+                !passwordEncoder.matches(password, optUser.get().getPassword())) {
+            return "redirect:/webclient/auth/login?error";
+        }
+
+        User user = optUser.get();
+        String token = jwtService.generateToken(new UserDetails(user));
+        Cookie cookie = new Cookie("JWT", token);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         resp.addCookie(cookie);
+
         return "redirect:/webclient/tasks";
     }
 

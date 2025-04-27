@@ -1,0 +1,22 @@
+.userbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.userbar span {
+  margin-right: 1rem;
+  font-size: 0.9rem;
+}
+.userbar button.btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  background: var(--btn-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--fg);
+  cursor: pointer;
+}
+.userbar button.btn:hover {
+  background: var(--btn-hover-bg);
+}

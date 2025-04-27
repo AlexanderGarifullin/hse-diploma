@@ -2,16 +2,41 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
-    <link rel="stylesheet" href="/css/styles.css" />
+    <title>Регистрация</title>
+    <link rel="stylesheet" th:href="@{/webclient/css/auth.css}" />
 </head>
-<body>
-<h1>Регистрация</h1>
-<form th:action="@{/webclient/auth/register}" method="post">
-    <div><label>Username: <input name="username"/></label></div>
-    <div><label>Password: <input type="password" name="password"/></label></div>
-    <button type="submit">Зарегистрироваться</button>
-</form>
-<p>Уже есть аккаунт? <a th:href="@{/webclient/auth/login}">Войти</a></p>
+<body class="auth-page">
+<div class="auth-container">
+
+    <h1>Регистрация</h1>
+
+    <form th:action="@{/webclient/auth/register}"
+          th:object="${user}"
+          method="post">
+
+        <!-- Username + ошибка -->
+        <div>
+            <label>Имя пользователя:
+                <input th:field="*{username}" type="text" required />
+            </label>
+            <div th:if="${#fields.hasErrors('username')}"
+                 th:errors="*{username}"
+                 class="error"></div>
+        </div>
+
+        <!-- Password + ошибка -->
+        <div>
+            <label>Пароль:
+                <input th:field="*{password}" type="password" required />
+            </label>
+        </div>
+
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+
+    <p>Уже есть аккаунт?
+        <a th:href="@{/webclient/auth/login}">Войти</a>
+    </p>
+</div>
 </body>
 </html>

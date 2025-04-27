@@ -5,6 +5,7 @@ import hse.dss.entity.Task;
 import hse.dss.entity.Test;
 import hse.dss.repository.TaskRepository;
 import hse.dss.repository.TestRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -79,5 +80,10 @@ public class TestService {
     public void requestTestGeneration(Long taskId) {
         String message = String.format("{\"taskId\": %d}", taskId);
         kafkaTemplate.send(TOPIC_GENERATE_TESTS, message);
+    }
+
+    @Transactional
+    public void deleteAllByTaskId(Long taskId) {
+        testRepository.deleteAllByTask_Id(taskId);
     }
 }

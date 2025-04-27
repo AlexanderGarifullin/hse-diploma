@@ -1,0 +1,105 @@
+/* 1. Подключаем аккуратный гротеск Inter из Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
+
+/* 2. Базовые переменные — легко менять палитру в одном месте */
+:root {
+  --bg: #ffffff;
+  --fg: #000000;
+  --border: #e5e5e5;
+  --accent: #0a0a0a;
+  --accent-hover: #1c1c1c;
+}
+
+/* 3. Центрирование <body>, обнуляем отступы */
+body.auth-page {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* 4. Карточка формы */
+.auth-container {
+  width: 100%;
+  max-width: 380px;
+  padding: 2.25rem 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* 5. Заголовок */
+.auth-container h1 {
+  margin: 0 0 1.75rem 0;
+  font-size: 1.55rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* 6. Поля формы */
+.auth-container label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-container input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fafafa;
+  color: var(--fg);
+  transition: border 0.15s ease;
+}
+.auth-container input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* 7. Кнопка отправки */
+.auth-container button {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.65rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.auth-container button:hover {
+  background: var(--accent-hover);
+}
+
+/* 8. Ссылка «Нет аккаунта?» */
+.auth-container p {
+  margin-top: 1.25rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+.auth-container a {
+  color: var(--fg);
+  text-decoration: underline;
+}
+.auth-container a:hover {
+  text-decoration: none;
+}
+
+
+/* Ошибки в формах */
+.auth-container .error {
+  color: #d32f2f; 
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}

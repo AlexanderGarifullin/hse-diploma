@@ -3,21 +3,29 @@
 <head>
     <meta charset="UTF-8"/>
     <title th:text="${testDto.id} != null ? 'Редактировать тест' : 'Новый тест'"/>
-    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/webclient/css/test_form.css}" />
+    <link rel="stylesheet" th:href="@{/webclient/css/userbar.css}" />
 </head>
 <body>
 <div th:replace="fragments :: userbar"></div>
-<h1 th:text="${testDto.id} != null ? 'Редактировать тест' : 'Новый тест'"/>
-<form th:action="${testDto.id} != null
+<div class="container">
+    <div class="form-container">
+        <h1 th:text="${testDto.id} != null ? 'Редактировать тест' : 'Новый тест'"></h1>
+        <form th:action="${testDto.id} != null
              ? @{/webclient/tasks/{taskId}/tests/{id}(taskId=${testDto.taskId},id=${testDto.id})}
              : @{/webclient/tasks/{taskId}/tests(taskId=${testDto.taskId})}"
-      th:object="${testDto}" method="post">
-    <div>
-        <label>Input:</label>
-        <textarea th:field="*{input}" rows="4"></textarea>
+              th:object="${testDto}" method="post">
+            <div class="form-group">
+                <label>Input:</label>
+                <textarea th:field="*{input}"></textarea>
+                <div th:if="${#fields.hasErrors('input')}" th:errors="*{input}" class="error"></div>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="btn">Сохранить</button>
+                <a th:href="@{'/webclient/tasks/' + ${testDto.taskId} + '/tests'}" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
     </div>
-    <button type="submit">Сохранить</button>
-    <a th:href="@{'/webclient/tasks/' + ${testDto.taskId} + '/tests'}">Отмена</a>
-</form>
+</div>
 </body>
 </html>
