@@ -89,6 +89,7 @@ public class SchemaRegexBuilder {
                 .put(PropKey.MAX.key(), rng[1])
                 .put(PropKey.FIELDS.key(), inner)
                 .put(PropKey.LINE_TYPE.key(), LineType.SINGLE.key())
+                .put(PropKey.IS_TEST_CASE_VAR.key(), true)
                 .build();
 
         vars.add(new VarDescriptor(
