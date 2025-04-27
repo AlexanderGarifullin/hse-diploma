@@ -4,7 +4,7 @@
   "baseType" : "INTEGER",
   "props" : {
     "min" : 1,
-    "max" : 10,
+    "max" : 5,
     "lineType" : "single",
     "isTestCase" : true,
     "fields" : [ {
@@ -13,7 +13,7 @@
       "baseType" : "INTEGER",
       "props" : {
         "min" : 1,
-        "max" : 200000,
+        "max" : 20,
         "lineType" : "single"
       }
     }, {
@@ -22,7 +22,7 @@
       "baseType" : "INTEGER",
       "props" : {
         "min" : 1,
-        "max" : 200000,
+        "max" : 7,
         "lineType" : "single"
       }
     }, {
