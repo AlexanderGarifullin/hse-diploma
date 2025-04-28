@@ -17,9 +17,30 @@ public class ArrayParser {
      * - иначе — NONE
      */
     public static SortedOrder detectOrder(String chunk) {
-        if (chunk.matches(".*?\\b[a-z]\\d?\\s*<\\s*[a-z]\\d?.*")) return SortedOrder.ASC;   // a1 < a2
-        if (chunk.contains("неубыв") || chunk.contains("возраст")) return SortedOrder.ASC;  // неубывающ / возрастающ
-        if (chunk.contains("невозраст") || chunk.contains("убыв")) return SortedOrder.DESC; // невозрастающ / убывающ
+        String s = chunk.toLowerCase();
+
+        // 1. a1 < a2
+        if (s.matches(".*?\\b[a-z]\\d?\\s*<\\s*[a-z]\\d?.*")) {
+            return SortedOrder.ASC;
+        }
+        // 2. «неубыв…» → ASC
+        if (s.contains("неубыв")) {
+            return SortedOrder.ASC;
+        }
+        // 3. «невозраст…» → DESC
+        if (s.contains("невозраст")) {
+            return SortedOrder.DESC;
+        }
+        // 4. «возраст…» → ASC
+        if (s.contains("возраст")) {
+            return SortedOrder.ASC;
+        }
+        // 5. «убыв…» → DESC
+        if (s.contains("убыв")) {
+            return SortedOrder.DESC;
+        }
         return SortedOrder.NONE;
     }
+
+
 }
