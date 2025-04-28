@@ -9,9 +9,6 @@ dependencies {
     // PostgreSQL
     runtimeOnly 'org.postgresql:postgresql'
 
-    // elk
-    implementation("net.logstash.logback:logstash-logback-encoder:8.0")
-
     // Jackson
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
