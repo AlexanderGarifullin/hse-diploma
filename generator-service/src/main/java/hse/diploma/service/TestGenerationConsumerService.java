@@ -10,6 +10,7 @@ import hse.diploma.repository.TaskRepository;
 import hse.diploma.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -30,38 +31,48 @@ public class TestGenerationConsumerService {
     @KafkaListener(topics = "schema-ready", groupId = "schema-ready-group")
     public void listenGenerateTests(String message) {
         try {
+            log.info("Received message for test generation: {}", message);
+
             // Преобразуем JSON-сообщение в POJO
             TestGenerationDTO request = objectMapper.readValue(message, TestGenerationDTO.class);
             Long taskId = request.taskId();
+            log.info("Parsed taskId from message: {}", taskId);
 
             // Найдем задачу по taskId
             Optional<Task> taskOptional = taskRepository.findById(taskId);
             if (taskOptional.isEmpty()) {
-                log.error("Task with id {} not found", taskId);
+                log.error("Task with id {} not found in the database", taskId);
                 return;
             }
             Task task = taskOptional.get();
-
+            log.info("Task with id {} found successfully", taskId);
             // 1. получить схему
             var schemaOpt = schemaConfigRepository.findById(taskId.toString());
             if (schemaOpt.isEmpty()) {
-                log.error("Schema for task {} not found in MongoDB", taskId);
+                log.error("Schema for task id {} not found in MongoDB", taskId);
                 return;
             }
 
             var schema = schemaOpt.get().getSchema();
-            log.info("Schema для задачи {} успешно загружена: {}", taskId, schema);
+            log.info("Schema for task id {} loaded successfully: {}", taskId, schema);
 
             // 2. сгенировать по схеме тесты и сорханить их
             List<String> tests = TestGenerator.generate(schema, null);
+            log.info("Generated {} tests for task id {}", tests.size(), taskId);
             for (String testInput : tests) {
                 Test test = new Test();
                 test.setTask(task);
                 test.setInput(testInput);
-                testRepository.save(test);
+                try {
+                    testRepository.save(test);
+                    log.info("Successfully save test for task id {}", task.getId());
+                } catch (DataIntegrityViolationException e) {
+                    log.warn("Duplicate test detected for task id {}. Skipping input: {}", task.getId(), testInput.trim());
+                }
             }
+            log.info("All generated tests saved successfully for task id {}", taskId);
         } catch (Exception e) {
-            log.error("Error processing test generation message", e);
+            log.error("Error while processing test generation message", e);
         }
     }
 }

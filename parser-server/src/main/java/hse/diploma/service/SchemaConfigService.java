@@ -9,6 +9,7 @@ import hse.diploma.parser.SchemaRegexBuilder;
 import hse.diploma.repository.SchemaConfigRepository;
 import hse.diploma.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SchemaConfigService {
@@ -30,14 +32,17 @@ public class SchemaConfigService {
 
     @KafkaListener(topics = "generate-tests", groupId = "test-generation-group")
     public void listenGenerateTests(String message) {
+        log.info("Received message for schema generation: {}", message);
         try {
             // Преобразуем JSON-сообщение в POJO
             TestGenerationDTO request = objectMapper.readValue(message, TestGenerationDTO.class);
             Long taskId = request.taskId();
+            log.info("Parsed taskId from message: {}", taskId);
 
             // Найдем задачу по taskId
             Optional<Task> taskOptional = taskRepository.findById(taskId);
             if (taskOptional.isEmpty()) {
+                log.error("Task with id {} not found", taskId);
                 return;
             }
 
@@ -51,6 +56,7 @@ public class SchemaConfigService {
                     .isPresent();
 
             if (!isUpToDate) {
+                log.info("Generating new schema for task id {}", taskId);
                 String inputData = task.getInputData();
                 Schema schema = SchemaRegexBuilder.parse(inputData);
 
@@ -61,12 +67,16 @@ public class SchemaConfigService {
                         .build();
 
                 schemaConfigRepository.save(cfg);
+                log.info("New schema saved for task id {}", taskId);
+            } else {
+                log.info("Schema for task id {} is already up-to-date", taskId);
             }
 
             String schemaReadyMsg = String.format("{\"taskId\": %d}", taskId);
             kafkaTemplate.send(TOPIC_SCHEMA_READY, schemaReadyMsg);
+            log.info("Sent schema-ready message for task id {}", taskId);
         } catch (Exception e) {
-
+            log.error("Error while processing schema generation message", e);
         }
     }
 }
